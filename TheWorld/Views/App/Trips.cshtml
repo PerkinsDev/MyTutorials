@@ -1,0 +1,49 @@
+﻿@*Razor supports several C# constructs. 1 being the @{ }*@
+@model IEnumerable<TheWorld.Models.Trip>
+@{
+    ViewBag.Title = "Home Page";   // This is me declaring an arbitrary property name to
+                                   // inject property values / method return values directly into the markup
+                                   // here we will push our INdex page title to the _Layout page
+}
+
+@*The general layout is done with Asp.Net latout page (like master page).
+    This id Index page specific content Set grid with Bootstrap classes*@
+<div class="row">
+   
+    <div class="col-md-6">
+        <h1>The World</h1>
+        <p>This will be a fun website soon!</p>
+        <form>
+            <div class="form-group">
+                <label>Date</label>
+                <input class="form-control" />
+            </div>
+            <div class="form-group">
+                <label>Location</label>
+                <input class="form-control" />
+            </div>
+            <div>
+                <input type="submit" value="Add" class="btn btn-success" />
+            </div>
+        </form>
+    </div>
+
+    <div class="col-md-6">
+        <h2>The Map</h2>
+
+
+        <ul>
+            @foreach (var item in Model)
+            {
+                <li>@item.Name : @item.DateCreated.ToString("d")</li>
+            }
+        </ul>
+        @*Works but is not strongly typed - Specify the type of model. Gets Intellisense. add to top @model IEnumerable<TheWorld.Models.Trip>*@
+        @*<ul>
+                @foreach (var item in Model)
+                {
+                    <li>@item.Name</li>
+                }
+            </ul>*@
+    </div>
+</div>

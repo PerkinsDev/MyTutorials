@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using TheWorld.Models;
@@ -40,21 +41,27 @@ namespace TheWorld.Controllers.Web
         // Need an action ( a method that is going to return a view) returns an Interface called IActionResult
         public IActionResult Index() // No params...just for the home page.
         {
-            try
-            {
-            // Get some data. will go to the DB and get list of all the Trips - as those Trip classes(Trip Objects)
-            // _context goes out into a DB someplace and converts the line _context.Trips.ToList(); to a query . Changed to interface and repository
-            // Will throw error if no DB connected
-            var data = _repository.GetAllTrips();
+            return View();
+        }
 
-            // Pass the data object to the View (List of Trip Objects here)
-            return View(data);     // go find a view, render it, and return it to the user. Need to build actual view
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"Failed to get trips in Index page: {ex.Message}");     // Dollar sign interpolation
-                return Redirect("/error");
-            }
+        [Authorize]   // chek to see if authenitcated. if not attempts to send them to a page to do so
+        public IActionResult Trips()
+        {
+            //try
+            //{
+                // Get some data. will go to the DB and get list of all the Trips - as those Trip classes(Trip Objects)
+                // _context goes out into a DB someplace and converts the line _context.Trips.ToList(); to a query . Changed to interface and repository
+                // Will throw error if no DB connected
+                var trips = _repository.GetAllTrips();
+
+                // Pass the data object to the View (List of Trip Objects here)
+                return View(trips);     // go find a view, render it, and return it to the user. Need to build actual view
+            //}
+            //catch (Exception ex)
+            //{
+            //    _logger.LogError($"Failed to get trips in Index page: {ex.Message}");     // Dollar sign interpolation
+            //    return Redirect("/error");
+            //}
         }
 
         // Default behavior of an IActionResult is GET. This is a GET
