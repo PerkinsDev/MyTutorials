@@ -1,0 +1,13 @@
+//config files allows us to store and structure information in different sections. Flexibility
+// To read:: set up configuration in Startup.cs
+{
+  "MailSettings": {
+    "ToAddress": "andy@perkins.com"
+  },
+  "ConnectionStrings": {
+    "WorldContextConnection": "Server=(localdb)\\MSSQLLocalDB;Database=TheWorldDb;Trusted_Connection=true;MultipleActiveResultSets=true;"
+  },
+  "Keys": {
+    "BingKey": "DONTEVERPUTKEYSINSOURCECONTROL" 
+  }  
+}
