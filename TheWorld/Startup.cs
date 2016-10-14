@@ -17,6 +17,7 @@ using TheWorld.ViewModels;
 namespace TheWorld
 {
     // Now on Github
+    // Test from Laptop --> Guthub --> Desktop
     public class Startup
     {
         // Store field at class level, otherwise can't use in ConfigureServices
