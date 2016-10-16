@@ -44,7 +44,7 @@ namespace TheWorld.Controllers.Web
             return View();
         }
 
-        [Authorize]   // chek to see if authenitcated. if not attempts to send them to a page to do so
+        [Authorize]   // check to see if authenitcated. if not attempts to send them to a page to do so
         public IActionResult Trips()
         {
             //try

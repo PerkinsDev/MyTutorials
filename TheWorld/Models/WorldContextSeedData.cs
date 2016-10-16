@@ -3,30 +3,51 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
 
 namespace TheWorld.Models
 {
     public class WorldContextSeedData
     {
         private WorldContext _context;
+        private UserManager<WorldUser> _userManager;
 
-        public WorldContextSeedData(WorldContext context)  // Need WorldContext Object to add new seed data if needed
+        // Dependency injection injects these into contructor
+        // Need WorldContext Object to add new seed data if needed
+        // Need UserManager for Identity Data
+        // UserManager allow add/remove, change users. We use to create a sample user at same time
+        public WorldContextSeedData(WorldContext context, UserManager<WorldUser> userManager)  
         {
             _context = context;
+            _userManager = userManager; 
         }
 
         // Async method needed to return a task
         public async Task EnsureSeedData()
         {
+            // test to see if the user exists
+            if (await _userManager.FindByEmailAsync("andy.perkins@theworld.com") == null)
+            {
+                //user doesn't exist yet. create
+                var user = new WorldUser()
+                {
+                    UserName = "andyperkins",
+                    Email = "andy.perkins@theworld.com"
+                };
+
+                // Create with user obj and a password (temp or config) has to meet password criteria
+                await _userManager.CreateAsync(user, "P@ssw0rd!");   // will get changed with config settings
+
+            }
             // check if there are any objects (trips in the DB) if not add some sample DB. if so, skip
             if (!_context.Trips.Any())
             {
-                // Create an instance of a trip
+                // Create an instance of a trip. Linkage of the WorldUser and the actual trips by querying against
                 var usTrip = new Trip()
                 {
                     DateCreated = DateTime.UtcNow,
                     Name = "US Trip",
-                    UserName = "", // TODO Add Username
+                    UserName = "andyperkins",
                     Stops = new List<Stop>()        // Empty collection to hold stops
                     {
                         new Stop() {  Name = "Atlanta, GA", Arrival = new DateTime(2014, 6, 4), Latitude = 33.748995, Longitude = -84.387982, Order = 0 },

@@ -6,6 +6,7 @@ using AutoMapper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -72,6 +73,14 @@ namespace TheWorld
             // Transient creates this everytime we need it. To inject it below in the Configure Method
             services.AddTransient<WorldContextSeedData>();
 
+            // Where you configure options for passwords stronger/weaker/special chars etc
+            services.AddIdentity<WorldUser, IdentityRole>(config =>
+                {
+                    config.User.RequireUniqueEmail = true;
+                    config.Password.RequiredLength = 8;
+                    config.Cookies.ApplicationCookie.LoginPath = "/Auth/Login";  // Send user to "" when not authenticated. can also use external or 2 factor
+                }).AddEntityFrameworkStores<WorldContext>();  // An object is returned and you can Configure Where the Identities are stored
+
             services.AddLogging();
             
             // Register all the Mvc services so the Configure method below enabling Mvc (app.UseMvc) can work. It needs services to run
@@ -89,20 +98,16 @@ namespace TheWorld
         // Every part of the web server is optional. Including simple cases like serving static files
         // Entire set of operations. Nothing is hidden or implicit. Replaces the global.asax. ORDER IS IMPORTANT
         // Interface IHostingEnvironment is provided by the system. Works more broadly than C#: #if DEBUG
+
+        // List of things (middlewares) that are going to look at requests and possibly return responses
+        // Must enable the dependancy. Enabled in project.json. 
+        // MUST be in correct order (ie default file before static files)
         public void Configure(IApplicationBuilder app, 
             IHostingEnvironment env, 
             ILoggerFactory factory,
             WorldContextSeedData seeder)
         {
-
-            // Initialize Tries to match all field name of a source(model) and destination(return real object). creatmap does this on our config obj
-            Mapper.Initialize(config =>
-            {
-                // Bi-directional mapping Reverse to do Entity to Model for safe return of ViewModel to API (after DB calls)
-                config.CreateMap<TripViewModel, Trip>().ReverseMap();    
-                config.CreateMap<StopViewModel, Stop>().ReverseMap();
-            });
-
+            // lets errors go to output console
             factory.AddConsole();
 
             // protect exceptions details from non-dev machines. Knows a Dev machine by project properties. 
@@ -117,11 +122,21 @@ namespace TheWorld
             {
                 factory.AddDebug(LogLevel.Error);
             }
-            // List of things (middlewares) that are going to look at requests and possibly return responses
-            // Must enable the dependancy. Enabled in project.json. 
-            // MUST be in correct order (ie default file before static files)
+
             app.UseStaticFiles();
-        
+
+            // Tell our app to use EF Identity. This turns it "on" in our system
+            app.UseIdentity();
+
+            // Initialize Tries to match all field name of a source(model) and destination(return real object). creatmap does this on our config obj
+            Mapper.Initialize(config =>
+            {
+                // Bi-directional mapping Reverse to do Entity to Model for safe return of ViewModel to API (after DB calls)
+                config.CreateMap<TripViewModel, Trip>().ReverseMap();
+                config.CreateMap<StopViewModel, Stop>().ReverseMap();
+            });
+
+
             // Enable MVC 6: Opt into MVC 6. Need middleware to listen for specific routes that I am going to implement
             // MVC requires a numer of services, classes etc., so you must add services.AddMvc() to ConfigureServices
             // Need a way to tell which controller. Using a lambda

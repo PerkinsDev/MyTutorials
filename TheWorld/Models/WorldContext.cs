@@ -10,7 +10,7 @@ using Microsoft.Extensions.Configuration;
 
 namespace TheWorld.Models
 {
-    // Class we can execute linq queries against.
+    // Class we can execute linq queries against. Now including Identity so DbContext becomes IdentityDbContext
     public class WorldContext : IdentityDbContext<WorldUser>
     {
         private IConfigurationRoot _config;
