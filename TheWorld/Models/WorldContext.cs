@@ -3,14 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 
 namespace TheWorld.Models
 {
-    // Class we can execute linq queries against.
-    public class WorldContext : DbContext
+    // Class we can execute linq queries against. Now including Identity so DbContext becomes IdentityDbContext
+    public class WorldContext : IdentityDbContext<WorldUser>
     {
         private IConfigurationRoot _config;
 
