@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -82,10 +83,18 @@ namespace TheWorld
                 }).AddEntityFrameworkStores<WorldContext>();  // An object is returned and you can Configure Where the Identities are stored
 
             services.AddLogging();
-            
+
             // Register all the Mvc services so the Configure method below enabling Mvc (app.UseMvc) can work. It needs services to run
             // Enable configuration of Json options. Lambda to change config objects properties. Serializer to ContractResolver use a Json method to adjust the case
-            services.AddMvc()
+            // Mvc has support for configuring itself
+            services.AddMvc(config =>
+                {
+                    if (_env.IsProduction()) // Use ASPNETCORE_ENVIRONMENT=Production to set tast machines, staging, dev
+                    { 
+                    // adds filter. if you attempt to access through HTTP it will attempt to direct you to HTTPS
+                    config.Filters.Add(new RequireHttpsAttribute());
+                    }
+                })
                 .AddJsonOptions(config =>
                 {
                     config.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();

@@ -13,13 +13,21 @@
 <body>
 
     <div id="sidebar">
-        <img src="~/img/AP_BW1.jpg" alt="headshot" class="headshot" />
-        <span id="username">Name gets changed with javascript</span>
+        @if (User.Identity.IsAuthenticated)
+        {
+            <img src="~/img/AP_BW1.jpg" alt="headshot" class="headshot" />
+            <span id="username">@User.Identity.Name</span>
+        }
         <ul class="nav">
             <!-- Tag Helper instead of href: lets you change patterns of routes later w/o changing a all hrefs -->
             <li class="active"><a asp-controller="App" asp-Action="Index">Home</a></li>
             <li><a asp-controller="App" asp-action="About">About</a></li>
             <li><a asp-controller="App" asp-action="Contact">Contact</a></li>
+            @if (User.Identity.IsAuthenticated)
+            {
+                <li><a asp-controller="App" asp-action="Trips">Trips</a></li>
+                <li><a asp-controller="Auth" asp-action="Logout">Logout</a></li>
+            }
         </ul>
     </div>
     <div id="wrapper">
