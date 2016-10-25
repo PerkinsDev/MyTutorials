@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using TheWorld.Models;
@@ -15,6 +16,7 @@ namespace TheWorld.Controllers.Api
     // Inherit from Controller to make it a controller
     // Class level route is the trip name and its stops
     // Other controller (tripcontroller) gets the trip. Trip name passed in as parameter
+    [Authorize]
     [Route("/api/trips/{tripName}/stops")]
     public class StopsController : Controller
     {
@@ -37,11 +39,11 @@ namespace TheWorld.Controllers.Api
         // Get - return the stops for a specific trip based on Association. route is the trip name and its stops
         // Other controller (tripcontroller) gets the trip. Trip name passed in as parameter
         [HttpGet("")]
-        public IActionResult Get(string tripName)
+        public IActionResult Get(string tripName)   // gets tripName fromn the route at top
         {
             try
             {
-                var trip = _repository.GetTripByName(tripName); // GetTripByName is added to repository
+                var trip = _repository.GetUserTripByName(tripName, User.Identity.Name); // Replaced by method for logged on user. GetTripByName is added to repository
 
                 // Configure in startup is needed
                 // Map collection of stops to a collectio of stopviewmodelsReturn class of stopview model instead of a raw stop
@@ -80,8 +82,8 @@ namespace TheWorld.Controllers.Api
                         newStop.Longitude = result.Longitude;
                     }
 
-                    // Save to the DB.
-                    _repository.AddStop(tripName, newStop);  // Addstop gets added to repository. can use refactoring
+                    // Save to the DB. Now include 3rd piece of data - username to make sure it is the right trip
+                    _repository.AddStop(tripName, newStop, User.Identity.Name);  // Addstop gets added to repository. can use refactoring
 
                     if (await _repository.SaveChangesAsync())
                     {

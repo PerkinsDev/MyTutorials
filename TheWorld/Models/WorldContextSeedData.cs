@@ -70,7 +70,7 @@ namespace TheWorld.Models
                 {
                     DateCreated = DateTime.UtcNow,
                     Name = "WorldTrip",
-                    UserName = "", // TODO Add UserName
+                    UserName = "andyperkins",
                     Stops = new List<Stop>()     // Empty collection to hold stops
                     {
                         new Stop() { Order = 0, Latitude =  33.748995, Longitude =  -84.387982, Name = "Atlanta, Georgia", Arrival = DateTime.Parse("Jun 3, 2014") },

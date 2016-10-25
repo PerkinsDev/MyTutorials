@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using TheWorld.Models;
@@ -13,6 +14,7 @@ namespace TheWorld.Controllers.Api
 {
     // Base route for entire class. Methods can now be "" because base roue is set
     //adding another level in methods below APPENDS to base route [HttpGet("/foo")] == api/trips/foo
+    [Authorize]
     [Route("api/trips")]
     public class TripsController : Controller
     {
@@ -32,14 +34,13 @@ namespace TheWorld.Controllers.Api
         {
             try
             {
-                var results = _repository.GetAllTrips();
+                var results = _repository.GetTripsByUsername(User.Identity.Name);   // change from GetAllTrips to get individual user. Get the current users uksername by drilling down. Can use to query the trips for that user
                 // Add Mapping to this method (also maps collections as needed here)
                 // Tell it to return (expect a collection) of IEnumerable - (change from Ok(_repository.GetAllTrips());)
                 return Ok(Mapper.Map<IEnumerable<TripViewModel>>(results));
             }
             catch (Exception ex)
             {
-                // TODO Logging
                 _logger.LogError($"Failed to get all Trips: {ex}");  // dev log: $ and {ex} put it all together
 
                 return BadRequest("Error occurred");  // send back generic message to user
@@ -56,6 +57,10 @@ namespace TheWorld.Controllers.Api
             {
                 // Save to Database
                 var newTrip = Mapper.Map<Trip>(theTrip);
+
+                // Makes assumption that user is authenticated to get this far so we can use the username to post to DB
+                newTrip.UserName = User.Identity.Name;
+
                 // need to set in startup.cs because it assumes they are already mapped (but not)
                 _repository.AddTrip(newTrip); // AddTrip needs to be built in the repository
 

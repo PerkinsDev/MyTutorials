@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -80,6 +81,22 @@ namespace TheWorld
                     config.User.RequireUniqueEmail = true;
                     config.Password.RequiredLength = 8;
                     config.Cookies.ApplicationCookie.LoginPath = "/Auth/Login";  // Send user to "" when not authenticated. can also use external or 2 factor
+                    config.Cookies.ApplicationCookie.Events = new CookieAuthenticationEvents  // event prop is a set of callbacks that we can handle while auth. is happening
+                    {
+                        OnRedirectToLogin = async ctx =>    // set to return a status code when api, instead of actual redirection
+                        {
+                            if (ctx.Request.Path.StartsWithSegments("/api") && //does uri start with /api?
+                            ctx.Response.StatusCode == 200)  // only when code is 200 )ok)
+                            {
+                                ctx.Response.StatusCode = 401;
+                            }
+                            else
+                            {
+                                ctx.Response.Redirect(ctx.RedirectUri);
+                            }
+                            await Task.Yield();
+                        }
+                    };
                 }).AddEntityFrameworkStores<WorldContext>();  // An object is returned and you can Configure Where the Identities are stored
 
             services.AddLogging();

@@ -23,17 +23,18 @@ namespace TheWorld.Models
         }
 
         // Implemented from the INterface. Still not saving to DB. Just pushing into the context as a new obj
+
+
         public void AddTrip(Trip trip)
         {
             _context.Add(trip);
         }
 
-
         // Implemented from the INterface. Still not saving to DB. Just pushing into the context as a new obj
-        public void AddStop(string tripName, Stop newStop)
+        public void AddStop(string tripName, Stop newStop, string username)
         {
-            // get the actual trip.
-            var trip = GetTripByName(tripName);
+            // get the actual trip. make sure trip belongs to the logged in user
+            var trip = GetUserTripByName(tripName, username);
 
             if (trip != null)   // if exists
             {
@@ -51,14 +52,40 @@ namespace TheWorld.Models
         }
 
 
+
         // Include = Eager load collection of stops (as a property) and add it to the trip when it is returned
         public Trip GetTripByName(string tripName)
         {
             return _context.Trips
                 .Include(t => t.Stops)
-                .Where(t => t.Name == tripName)
-                .FirstOrDefault();
+                .FirstOrDefault(t => t.Name == tripName);
         }
+
+        public IEnumerable<Trip> GetTripsByUsername(string name)
+        {
+            //Add where clause
+            return _context
+                .Trips
+                .Include(t => t.Stops)
+                .Where(t => t.UserName == name)
+                .ToList();
+        }
+
+        public Trip GetUserTripByName(string tripName, string username)
+        {
+            return _context.Trips
+                .Include(t => t.Stops)
+                .FirstOrDefault(t => t.Name == tripName && t.UserName == username);
+
+            // Video way. It appears FirstOrDefault takes a where clause
+            //return _context.Trips
+            //   .Include(t => t.Stops)
+            //   .Where(t => t.Name == tripName && t.UserName == username)
+            //   .FirstOrDefault();
+        }
+
+
+
 
         // Actual Save to DB
         // returns a task that wraps a bool so can use async
