@@ -32,8 +32,11 @@
         vm.newTrip = {};   // object literal for obj with no props
 
         //called when user click on the add trip btn. set with ng-submit on form tag with function name
-        vm.addTrip = function() {
-            alert(vm.newTrip.name);
+        vm.addTrip = function () {
+            // add a new trip to our object, push to collection. Angular auto adds to page as add new trips in text box. Not sent to DB yet.
+            vm.trips.push({ name: vm.newTrip.name, created: new Date() });
+            // makes newTrip a blank object. tells browser the data is gone so clear the form
+            vm.newTrip = {};
         };
     }
 

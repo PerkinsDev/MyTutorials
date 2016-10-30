@@ -31,11 +31,17 @@
         <form novalidate name="newTripForm" ng-submit="vm.addTrip()"> @*Call adtrip function that is specifiec on our vm*@
             <div class="form-group">
                 <label for="name">Trip Name</label>
-                <input class="form-control" type="text" id="name" name="name" ng-model="vm.newTrip.name"/>
+                <input class="form-control" type="text" id="name" name="name" ng-model="vm.newTrip.name" required ng-minlength="5" />
+                <span ng-show="newTripForm.name.$error.required" class="text-warning">Name is required</span>
+                <span ng-show="newTripForm.name.$error.minlength" class="text-warning">Name must be at least 5 characters</span>
+
             </div>
             <div class="form-group">
-                <input type="submit" value="Add" class="btn btn-success btn-sm"/>
+                <input type="submit" value="Add" 
+                       class="btn btn-success btn-sm"
+                       ng-disabled="newTripForm.$invalid" />  @*Says "if the form is invalid, disable this control*@
             </div>
+       
         </form>
     </div>
 
