@@ -25,11 +25,11 @@ label {
 /*#footer {
     background-color: #222;
     color: #eee;*/
-    /*top/bottom & left*/
-    /*padding: 8px 5px; 
+/*top/bottom & left*/
+/*padding: 8px 5px; 
     position: fixed;*/
-    /* Force to adhere to bottom with fixed and 0*/
-    /*bottom: 0;      
+/* Force to adhere to bottom with fixed and 0*/
+/*bottom: 0;      
     width: 100%;
 }*/
 
@@ -95,6 +95,12 @@ label {
         transition: margin-left ease .25s;
     }
 
+
+/* these w & h settings are a requirement for imbedded google maps, gmaps is a wrap around google map*/
+#map {
+    width: 100%;
+    height: 600px;
+}
 /*override for submit*/
 /*input[type=submit] {
     width: auto;

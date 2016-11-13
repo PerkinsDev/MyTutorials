@@ -9,6 +9,8 @@
     "jquery": "~3.1.0",
     "jquery-validation": "~1.15.1",
     "jquery-validation-unobtrusive": "~3.2.6",
-    "underscore": "~1.8.3"
+    "underscore": "~1.8.3",
+    "angular-route": "~1.5.8",
+    "travelmap": "~1.0.2"
   }
 }

@@ -1,5 +1,5 @@
 ﻿@*Razor supports several C# constructs. 1 being the @{ }*@
-@model IEnumerable<TheWorld.Models.Trip>
+
 @{
     ViewBag.Title = "Home Page";   // This is me declaring an arbitrary property name to
                                    // inject property values / method return values directly into the markup
@@ -7,83 +7,27 @@
 }
 
 @section Scripts {
+    <script src="~/lib/underscore/underscore-min.js"></script>
     <script src="~/lib/angular/angular.min.js"></script>
+    <script src="~/lib/angular-route/angular-route.min.js"></script>
+    <script src="https://maps.googleapis.com/maps/api/js"></script>
+    <script src="~/lib/gmaps/gmaps.min.js"></script>
+    <script src="~/lib/travelmap/travelmap.min.js"></script>
     <script src="~/js/simpleControls.js"></script>
     <script src="~/js/app-trips.js"></script>
     <script src="~/js/tripsController.js"></script>
+    <script src="~/js/tripEditorController.js"></script>
+
 }
 @*The general layout is done with Asp.Net layout page (like master page).
     This id Index page specific content Set grid with Bootstrap classes*@
+@*Everything was cut to seperate html fragments and routed with angular
+    All that is left is a description of what module to use (for routing) and the placeholer for the view, which is dynamic based on routing*@
 <div class="row" ng-app="app-trips">
     @*Brute force binding*@
     @*<div>{{ "Two plus two equals: " + 2 + 2 }}</div>*@
 
-    @*Using a js controller. here's a piece of code inside of our app that is respoinsible for this subsection of our page*@
-    @*As vm is a variable that we can now use for data binding*@
-    <div ng-controller="tripsController as vm" class="col-md-6 col-md-offset-3">
-        @*For failed data load. show only if exists (since js, will only show if not an empty string or doesn't exist)*@
-        <div class="text-danger" ng-show="vm.errorMessage">{{ vm.errorMessage }}</div>
-        <wait-cursor display-when="vm.isBusy"></wait-cursor>
-        <table class="table table-responsive table-striped">
-            <tr ng-repeat="trip in vm.trips">
-                <td>{{ trip.name }}</td>
-                <td>{{ trip.created | date:'MM-dd-yyyy' }}</td>
-                <td><a href="#" class="btn btn-sm btn-primary">Manage</a></td>
-            </tr>
-        </table>
-
-        <form novalidate name="newTripForm" ng-submit="vm.addTrip()">
-            @*Call adtrip function that is specifiec on our vm*@
-            <div class="form-group">
-                <label for="name">Trip Name</label>
-                <input class="form-control" type="text" id="name" name="name" ng-model="vm.newTrip.name" required ng-minlength="5" />
-                <span ng-show="newTripForm.name.$error.required" class="text-warning">Name is required</span>
-                <span ng-show="newTripForm.name.$error.minlength" class="text-warning">Name must be at least 5 characters</span>
-
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Add"
-                       class="btn btn-success btn-sm"
-                       ng-disabled="newTripForm.$invalid" /> @*Says "if the form is invalid, disable this control*@
-                </div>
-
-            </form>
-        </div>
-
-        <div class="col-md-6">
-            <h1>The World</h1>
-            <p>This will be a fun website soon!</p>
-            <form>
-                <div class="form-group">
-                    <label>Date</label>
-                    <input class="form-control" />
-                </div>
-                <div class="form-group">
-                    <label>Location</label>
-                    <input class="form-control" />
-                </div>
-                <div>
-                    <input type="submit" value="Add" class="btn btn-success" />
-                </div>
-            </form>
-        </div>
-
-        <div class="col-md-6">
-            <h2>The Map</h2>
+    <div ng-view></div>   @*directive finds our ng-view (tripsView.html and inject the content here. Container for where the angular views are injected*@
 
 
-            <ul>
-                @foreach (var item in Model)
-            {
-                    <li>@item.Name : @item.DateCreated.ToString("d")</li>
-                }
-            </ul>
-            @*Works but is not strongly typed - Specify the type of model. Gets Intellisense. add to top @model IEnumerable<TheWorld.Models.Trip>*@
-            @*<ul>
-                    @foreach (var item in Model)
-                    {
-                        <li>@item.Name</li>
-                    }
-                </ul>*@
-        </div>
-    </div>
+</div>

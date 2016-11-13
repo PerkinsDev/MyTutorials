@@ -49,13 +49,15 @@ namespace TheWorld.Controllers.Web
         {
             //try
             //{
-                // Get some data. will go to the DB and get list of all the Trips - as those Trip classes(Trip Objects)
-                // _context goes out into a DB someplace and converts the line _context.Trips.ToList(); to a query . Changed to interface and repository
-                // Will throw error if no DB connected
-                var trips = _repository.GetAllTrips();
+            // Get some data. will go to the DB and get list of all the Trips - as those Trip classes(Trip Objects)
+            // _context goes out into a DB someplace and converts the line _context.Trips.ToList(); to a query . Changed to interface and repository
+            // Will throw error if no DB connected
+            // Update: trip was removed- now accessed thorugh api and client-side
 
+            
+                // Update: trip was removed- now accessed thorugh api and client-side
                 // Pass the data object to the View (List of Trip Objects here)
-                return View(trips);     // go find a view, render it, and return it to the user. Need to build actual view
+                return View();     // go find a view, render it, and return it to the user. Need to build actual view
             //}
             //catch (Exception ex)
             //{
