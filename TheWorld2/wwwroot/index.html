@@ -1,0 +1,57 @@
+﻿<!DOCTYPE html>
+ <!--specifies to the browser how to use it. Which version...HTML5-->
+<html>
+
+<!-- 1st child is head where non-structural info is kept like metadata structure-->
+<head>
+    <title>The World</title>    <!-- Give every page a title (ends up in tag and bookmarks) -->
+    <meta charset="utf-8" />    <!-- Tells browser what we think we are sending as a character set -->
+    <link rel="stylesheet" href="css/site.css" />
+</head>
+
+<!-- Body = Descriptive structure of what the page is -->
+<body>
+    <!-- Shift + alt + w   creates a div around selected text. div adds a carriage return. Comes from the web essentials download-->
+    <div id="sidebar">
+        <img src="img/AP_BW1.jpg" alt="headshot" class="headshot"/>
+        <span id="username">Name gets changed with javascript</span>
+        <ul class="menu">
+            <li class="active"><a href="#">Home</a></li>
+            <li><a href="#">About</a></li>
+            <li><a href="#">Contact</a></li>
+            <li><a href="#">Login</a></li>
+        </ul>
+    </div>
+    <div id="wrapper">
+        <!-- Main Content div-->
+        <div id="main">
+            <div>
+                <button id="sidebarToggle">Toggle Menu</button>
+            </div>
+            <h1>The World</h1>
+            <p>This will be a fun website soon!</p>
+            <form>
+                <!-- Use form to gather input from the user-->
+                <div>
+                    <label>Date</label>
+                    <input />  <!-- default input type=Text -->
+                </div>
+                <div>
+                    <label>Location</label>
+                    <input />
+                </div>
+                <div> <input type="submit" value="Add" /> <!-- value attribute sets text --></div>
+            </form>
+        </div>
+        <!-- Footer Content div-->
+        <div id="footer">
+            <!-- Escapes are called entities in HTML. Start with &(then set of chars); -->
+            &copy; 2016 The World Ltd.
+        </div>
+    </div>
+
+    <script type="text/javascript" src="lib/jquery/dist/jquery.min.js"></script>
+    <!-- Write some javascript. @ end to make sure page elements are constructed first. BEST PRACTICE AT END -->
+    <script type="text/javascript" src="js/site.js"></script>
+</body>
+</html>

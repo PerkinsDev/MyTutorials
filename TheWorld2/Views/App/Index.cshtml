@@ -1,0 +1,17 @@
+﻿@*Razor supports several C# constructs. 1 being the @{ }*@
+@model IEnumerable<TheWorld.Models.Trip>
+@{
+    ViewBag.Title = "Home Page";   // This is me declaring an arbitrary property name to
+                                   // inject property values / method return values directly into the markup
+                                   // here we will push our INdex page title to the _Layout page
+}
+
+@*The general layout is done with Asp.Net latout page (like master page).
+    This id Index page specific content Set grid with Bootstrap classes*@
+<div class="row">
+    <div class="col-md-12">
+        <h1>Welcome to the World</h1>
+        <p>This app will allow you to plan for world trips</p>
+        <a asp-controller="App" asp-action="trips" class="btn btn-lg btn-success">View My Trips</a> @*// May not be directing correctly*@
+    </div>
+</div>

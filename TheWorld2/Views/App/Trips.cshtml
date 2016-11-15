@@ -1,0 +1,40 @@
+﻿@*Razor supports several C# constructs. 1 being the @{ }*@
+
+@{
+    ViewBag.Title = "Home Page";   // This is me declaring an arbitrary property name to
+                                   // inject property values / method return values directly into the markup
+                                   // here we will push our INdex page title to the _Layout page
+}
+
+@section Scripts {
+    <script src="~/lib/underscore/underscore-min.js"></script>
+    <script src="~/lib/angular/angular.min.js"></script>
+    <script src="~/lib/angular-route/angular-route.min.js"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCp4ygDrcnb56ND8RZ62rfQFmrFvKaT6mQ"></script>
+    <script src="~/lib/gmaps/gmaps.min.js"></script>
+    <script src="~/lib/travelmap/travelmap.min.js"></script>
+    <environment names="Development">
+        <script src="~/js/simpleControls.js"></script>
+        <script src="~/js/app-trips.js"></script>
+        <script src="~/js/tripsController.js"></script>
+        <script src="~/js/tripEditorController.js"></script>
+    </environment>
+<environment names="Production,Staging">
+    <script src="~/lib/_app/simpleControls.js"></script>
+    <script src="~/lib/_app/app-trips.js"></script>
+    <script src="~/lib/_app/tripsController.js"></script>
+    <script src="~/lib/_app/tripEditorController.js"></script>
+</environment>
+}
+@*The general layout is done with Asp.Net layout page (like master page).
+    This id Index page specific content Set grid with Bootstrap classes*@
+@*Everything was cut to seperate html fragments and routed with angular
+    All that is left is a description of what module to use (for routing) and the placeholer for the view, which is dynamic based on routing*@
+<div class="row" ng-app="app-trips">
+    @*Brute force binding*@
+    @*<div>{{ "Two plus two equals: " + 2 + 2 }}</div>*@
+
+    <div ng-view></div>   @*directive finds our ng-view (tripsView.html and inject the content here. Container for where the angular views are injected*@
+
+
+</div>
